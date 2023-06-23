@@ -1,4 +1,4 @@
-import "@/App.css";
+//import "@/App.css";
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
 import {

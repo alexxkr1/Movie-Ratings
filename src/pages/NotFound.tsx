@@ -1,9 +1,11 @@
-import "../App.css";
+import RootLayout from "@/layout/RootLayout";
 
 function NotFound() {
   return (
     <>
-      <h1>Not Found</h1>
+      <RootLayout>
+        <h1>Not Found</h1>
+      </RootLayout>
     </>
   );
 }
