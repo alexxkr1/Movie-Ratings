@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import "./Index.css";
+//import "../App.css";
 import {
   Button,
   Card,
@@ -12,12 +12,13 @@ import {
 import RootLayout from "@/layout/RootLayout";
 import { httpClient } from "@/axios";
 import { getMovies } from "@/features/movies/moviesSlice";
+import SearchBar from "@/components/Searchbar";
 interface RootState {
   movie: {
     movies: [];
   };
 }
-function Index() {
+function TV() {
   const dispatch = useDispatch();
   const movies = useSelector((state: RootState) => state.movie.movies);
   useEffect(() => {
@@ -27,7 +28,7 @@ function Index() {
       }; // auth header with bearer token
 
       const { data } = await httpClient.get(
-        "3/tv/popular?language=en-US&page=1",
+        "event/get-all-events",
         //"discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'",
         {
           headers: {
@@ -37,30 +38,16 @@ function Index() {
         }
       );
       console.log("testing", movies);
-      await dispatch(getMovies(data.results));
+      await dispatch(getMovies(data.events));
       console.log(data);
     }
     getData();
   }, []);
 
-
-  function renderStars(rating: number) {
-    const numberOfStars = Math.round((rating / 10) * 5); // Calculate the number of filled stars based on the rating
-    const starIcons = [];
-    for (let i = 0; i < 5; i++) {
-      if (i < numberOfStars) {
-        starIcons.push(<span className="fa fa-star checked" key={i}></span>);
-      } else {
-        starIcons.push(<span className="fa fa-star" key={i}></span>);
-      }
-    }
-    return starIcons;
-  }
   return (
     <>
       <RootLayout>
-        <h1 className="text-center">Popular Movies Now</h1>
-
+        <h1 className="text-center">Popular TV Shows Now</h1>
         <div
           style={{
             display: "flex",
@@ -74,23 +61,18 @@ function Index() {
               style={{
                 width: "18rem",
               }}
-              className="mb-4"
             >
-              <img
-                alt="Sample"
-                src={"https://image.tmdb.org/t/p/original/" + movie.poster_path}
-              />
+              <img alt="Sample" src="https://picsum.photos/300/200" />
               <CardBody>
                 <CardTitle tag="h5">{movie.name}</CardTitle>
                 <CardSubtitle className="mb-2 text-muted" tag="h6">
-                {renderStars(movie.vote_average)}
+                  Card subtitle
                 </CardSubtitle>
-                {/* <CardText>
+                <CardText>
                   Some quick example text to build on the card title and make up
                   the bulk of the card‘s content.
                 </CardText>
-                <Button>Button</Button> */}
-                  <Button>More</Button>
+                <Button>Button</Button>
               </CardBody>
             </Card>
           ))}
@@ -100,4 +82,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default TV;

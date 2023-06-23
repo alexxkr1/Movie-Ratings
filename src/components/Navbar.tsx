@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Collapse,
   Navbar,
@@ -7,14 +7,9 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
 } from "reactstrap";
 
-function NavbarComp(args: any) {
+function NavbarComp() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
@@ -27,14 +22,10 @@ function NavbarComp(args: any) {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">
-                  Movies
-                </NavLink>
+                <NavLink href="/">Movies</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">
-                  TV Shows
-                </NavLink>
+                <NavLink href="/tv">TV Shows</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
