@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 //import "../App.css";
 import {
   Button,
@@ -8,75 +8,102 @@ import {
   CardText,
   CardSubtitle,
   CardTitle,
+  Spinner,
 } from "reactstrap";
 import RootLayout from "@/layout/RootLayout";
 import { httpClient } from "@/axios";
-import { getMovies } from "@/features/movies/moviesSlice";
-import SearchBar from "@/components/Searchbar";
+import { getTvShows } from "@/features/movies/moviesSlice";
 interface RootState {
   movie: {
-    movies: [];
+    tvShows: {
+      name: string;
+      poster_path: string;
+      vote_average: number;
+    }[];
   };
 }
 function TV() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
-  const movies = useSelector((state: RootState) => state.movie.movies);
+  const tvShows = useSelector((state: RootState) => state.movie.tvShows);
+  // const isLoading = useRef(false);
   useEffect(() => {
     async function getData() {
-      const headers = {
-        Authorization: "Bearer a2519cbf9dc79b1cd61a283b7b8a8b7d",
-      }; // auth header with bearer token
-
-      const { data } = await httpClient.get(
-        "event/get-all-events",
-        //"discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'",
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMjUxOWNiZjlkYzc5YjFjZDYxYTI4M2I3YjhhOGI3ZCIsInN1YiI6IjY0OTRiM2ZjZDIzNmU2MDExZTA5ODg3MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._C-U5_IOlj-OSQBtg00EShhXDwyJdgrVLFIE4IUS48M",
-          },
-        }
-      );
-      console.log("testing", movies);
-      await dispatch(getMovies(data.events));
-      console.log(data);
+      try {
+        await setIsLoading(true);
+        const { data } = await httpClient.get(
+          "3/tv/popular?language=en-US&page=1"
+          //"discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'",
+        );
+        await new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
+        await dispatch(getTvShows(data.results));
+        console.log(data);
+      } catch (error) {
+      } finally {
+        await setIsLoading(false);
+      }
     }
-    getData();
-  }, []);
 
+    if (!tvShows.length) {
+      getData();
+    }
+  }, []);
+  function renderStars(rating: number) {
+    const numberOfStars = Math.round((rating / 10) * 5); // Calculate the number of filled stars based on the rating
+    const starIcons = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < numberOfStars) {
+        starIcons.push(<span className="fa fa-star checked" key={i}></span>);
+      } else {
+        starIcons.push(<span className="fa fa-star" key={i}></span>);
+      }
+    }
+    return starIcons;
+  }
   return (
     <>
       <RootLayout>
         <h1 className="text-center">Popular TV Shows Now</h1>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-          }}
-        >
-          {movies.map((movie, index) => (
-            <Card
-              key={index}
-              style={{
-                width: "18rem",
-              }}
-            >
-              <img alt="Sample" src="https://picsum.photos/300/200" />
-              <CardBody>
-                <CardTitle tag="h5">{movie.name}</CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6">
-                  Card subtitle
-                </CardSubtitle>
-                <CardText>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card‘s content.
-                </CardText>
-                <Button>Button</Button>
-              </CardBody>
-            </Card>
-          ))}
-        </div>
+        {isLoading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Spinner size="sm">Loading...</Spinner>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {tvShows.map((movie, index) => (
+              <Card
+                key={index}
+                style={{
+                  width: "18rem",
+                }}
+              >
+                <img
+                  alt="Sample"
+                  src={
+                    "https://image.tmdb.org/t/p/original/" + movie.poster_path
+                  }
+                />
+                <CardBody>
+                  <CardTitle tag="h5">{movie.name}</CardTitle>
+                  <CardSubtitle className="mb-2 text-muted" tag="h6">
+                    {renderStars(movie.vote_average)}
+                  </CardSubtitle>
+
+                  <Button>More</Button>
+                </CardBody>
+              </Card>
+            ))}
+          </div>
+        )}
       </RootLayout>
     </>
   );

@@ -11,7 +11,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/tv" element={<Index />} />
+            <Route path="/tv" element={<TV />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

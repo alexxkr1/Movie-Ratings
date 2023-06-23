@@ -1,44 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { httpClient } from "@/axios";
 
-interface RootState {
-  counter: {
-    firstName: string;
-    value: number;
-    movies: [];
-  };
-}
-
 export const movieSlice = createSlice({
   name: "counter",
   initialState: {
-    value: 0,
-    firstName: "Alex",
     movies: [],
+    tvShows: [],
   },
   reducers: {
-    increment: (state) => {},
     getMovies: (state, action) => {
       try {
         //@ts-ignore
         state.movies = [...action.payload];
-
-        console.log("state", state);
 
         console.log("movies", state.movies);
       } catch (error) {
         console.error(error);
       }
     },
-    decrement: (state) => {},
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    getTvShows: (state, action) => {
+       //@ts-ignore
+       state.tvShows = [...action.payload];
+
+       console.log("tv", state.tvShows);
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, getMovies } =
-  movieSlice.actions;
-export const value = (state: RootState) => state.counter.firstName;
+export const { getTvShows, getMovies } = movieSlice.actions;
 export default movieSlice.reducer;

@@ -14,35 +14,31 @@ import { httpClient } from "@/axios";
 import { getMovies } from "@/features/movies/moviesSlice";
 interface RootState {
   movie: {
-    movies: [];
+    movies: {
+      poster_path: string;
+      title: string;
+      vote_average: number;
+    }[];
   };
 }
 function Index() {
   const dispatch = useDispatch();
   const movies = useSelector((state: RootState) => state.movie.movies);
+
   useEffect(() => {
     async function getData() {
-      const headers = {
-        Authorization: "Bearer a2519cbf9dc79b1cd61a283b7b8a8b7d",
-      }; // auth header with bearer token
-
       const { data } = await httpClient.get(
-        "3/tv/popular?language=en-US&page=1",
-        //"discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'",
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMjUxOWNiZjlkYzc5YjFjZDYxYTI4M2I3YjhhOGI3ZCIsInN1YiI6IjY0OTRiM2ZjZDIzNmU2MDExZTA5ODg3MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._C-U5_IOlj-OSQBtg00EShhXDwyJdgrVLFIE4IUS48M",
-          },
-        }
+        "3/movie/popular?language=en-US&page=1"
       );
       console.log("testing", movies);
       await dispatch(getMovies(data.results));
       console.log(data);
     }
-    getData();
-  }, []);
 
+    if (!movies.length) {
+      getData();
+    }
+  }, []);
 
   function renderStars(rating: number) {
     const numberOfStars = Math.round((rating / 10) * 5); // Calculate the number of filled stars based on the rating
@@ -81,16 +77,16 @@ function Index() {
                 src={"https://image.tmdb.org/t/p/original/" + movie.poster_path}
               />
               <CardBody>
-                <CardTitle tag="h5">{movie.name}</CardTitle>
+                <CardTitle tag="h5">{movie.title}</CardTitle>
                 <CardSubtitle className="mb-2 text-muted" tag="h6">
-                {renderStars(movie.vote_average)}
+                  {renderStars(movie.vote_average)}
                 </CardSubtitle>
                 {/* <CardText>
                   Some quick example text to build on the card title and make up
                   the bulk of the card‘s content.
                 </CardText>
                 <Button>Button</Button> */}
-                  <Button>More</Button>
+                <Button>More</Button>
               </CardBody>
             </Card>
           ))}
