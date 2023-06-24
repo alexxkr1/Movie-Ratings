@@ -9,13 +9,14 @@ const SearchBar = () => {
 
   function handleSubmit(e: any) {
     e.preventDefault();
-    console.log(searchInput);
     if (searchInput) {
       const searchPath = `/search-results/${searchInput}`;
-      if (window.location.pathname === searchPath) {
-        window.location.reload(); 
+      if (window.location.pathname.includes("/search-results/")) {
+        window.location.reload();
+        console.log(window.location.pathname);
       } else {
         navigate(searchPath);
+        window.location.reload();
       }
     }
   }
