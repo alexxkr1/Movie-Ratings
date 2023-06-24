@@ -1,5 +1,6 @@
 import SearchBar from "@/components/Searchbar";
 import NavbarComp from "@/components/Navbar";
+import Footer from "@/components/Footer";
 const RootLayout = ({ children }: any) => {
   return (
     <>
@@ -14,6 +15,7 @@ const RootLayout = ({ children }: any) => {
         <SearchBar />
         <main>{children}</main>
       </div>
+      <Footer/>
     </>
   );
 };

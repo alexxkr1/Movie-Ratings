@@ -12,11 +12,10 @@ const SearchBar = () => {
     if (searchInput) {
       const searchPath = `/search-results/${searchInput}`;
       if (window.location.pathname.includes("/search-results/")) {
-        window.location.reload();
-        console.log(window.location.pathname);
-      } else {
         navigate(searchPath);
         window.location.reload();
+      } else {
+        navigate(searchPath);
       }
     }
   }
@@ -26,6 +25,7 @@ const SearchBar = () => {
       setSearchInput(keyword);
     }
   }, []);
+
   const [searchInput, setSearchInput] = useState("");
   return (
     <>

@@ -46,7 +46,6 @@ function SearchResults() {
             total_pages: data.total_pages,
           })
         );
-        console.log(data);
       } catch (error) {
         // Handle error
       } finally {
@@ -127,7 +126,10 @@ function SearchResults() {
                 key={index}
                 style={{
                   width: "18rem",
+
                 }}
+                className="mb-4"
+
               >
                 <img
                   alt="Sample"
@@ -154,18 +156,6 @@ function SearchResults() {
             marginTop: "3rem",
           }}
         >
-          {/* <Pagination>
-            {Array.from(Array(pages), (_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink
-                  onClick={() => handlePageChange(index + 1)}
-                  href="#"
-                >
-                  {index }
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-          </Pagination> */}
           <Pagination>
             {Array.from(Array(pages), (_, index) => {
               const pageNumber = index + 1;

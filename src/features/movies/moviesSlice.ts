@@ -8,19 +8,29 @@ export const movieSlice = createSlice({
     tvShows: [],
     searchResults: [],
     totalSearchPageResults: 0,
+    totalResultsMovies: 0,
+    totalResultsTVShows: 0,
   },
   reducers: {
     getMovies: (state, action) => {
       try {
+        const { results, total_pages } = action.payload;
+
         //@ts-ignore
-        state.movies = [...action.payload];
+        state.movies = [...results];
+        state.totalResultsMovies = total_pages;
+
       } catch (error) {
         console.error(error);
       }
     },
     getTvShows: (state, action) => {
+      const { results, total_pages } = action.payload;
+
       //@ts-ignore
-      state.tvShows = [...action.payload];
+      state.tvShows = [...results];
+      state.totalResultsTVShows = total_pages;
+
     },
     getSearchResults: (state, action) => {
       const { results, total_pages } = action.payload;

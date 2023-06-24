@@ -8,6 +8,9 @@ import {
   CardText,
   CardSubtitle,
   CardTitle,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
   Spinner,
 } from "reactstrap";
 import RootLayout from "@/layout/RootLayout";
@@ -20,12 +23,20 @@ interface RootState {
       poster_path: string;
       vote_average: number;
     }[];
+    totalResultsTVShows: number;
   };
 }
 function TV() {
   const [isLoading, setIsLoading] = useState(false);
-
+  const totalResultsTVShows = useSelector(
+    (state: RootState) => state.movie.totalResultsTVShows
+  );
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = async (page: number) => {
+    setCurrentPage(page);
+  };
   const tvShows = useSelector((state: RootState) => state.movie.tvShows);
   // const isLoading = useRef(false);
   useEffect(() => {
@@ -40,7 +51,6 @@ function TV() {
           setTimeout(resolve, 2000);
         });
         await dispatch(getTvShows(data.results));
-        console.log(data);
       } catch (error) {
       } finally {
         await setIsLoading(false);
@@ -63,6 +73,33 @@ function TV() {
     }
     return starIcons;
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await httpClient.get(
+          `3/tv/popular?language=en-US&page=${currentPage}`
+        );
+        // Simulating a delay for demonstration purposes
+        await new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
+        dispatch(
+          getTvShows({
+            results: data.results,
+            total_pages: data.total_pages,
+          })
+        );
+      } catch (error) {
+        // Handle error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
   return (
     <>
       <RootLayout>
@@ -85,6 +122,7 @@ function TV() {
                 style={{
                   width: "18rem",
                 }}
+                className="mb-4"
               >
                 <img
                   alt="Sample"
@@ -104,6 +142,21 @@ function TV() {
             ))}
           </div>
         )}
+
+        <Pagination>
+          {Array.from(Array(totalResultsTVShows), (_, index) => {
+            const pageNumber = index + 1;
+
+            const handleClick = () => handlePageChange(pageNumber);
+            return (
+              <PaginationItem key={index}>
+                <PaginationLink onClick={() => handleClick()} href="#">
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
+        </Pagination>
       </RootLayout>
     </>
   );
