@@ -14,6 +14,7 @@ function NavbarComp() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+
   return (
     <>
       <div>
@@ -23,12 +24,12 @@ function NavbarComp() {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink>
+                <NavLink to="/tv">
                   <Link to="/">Movies</Link>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink>
+                <NavLink to="/tv" >
                   <Link to="/tv">TV Shows</Link>
                 </NavLink>
               </NavItem>

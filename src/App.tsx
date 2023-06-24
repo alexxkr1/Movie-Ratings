@@ -1,9 +1,9 @@
 //import "@/App.css";
 import Index from "@/pages/Index";
-import TV from '@/pages/TV'
+import TV from "@/pages/TV";
 import NotFound from "@/pages/NotFound";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
+import SearchResults from "./pages/SearchResults";
 function App() {
   return (
     <>
@@ -12,6 +12,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/tv" element={<TV />} />
+            <Route
+              path="/search-results/:keyword"
+              element={<SearchResults />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

@@ -6,6 +6,7 @@ export const movieSlice = createSlice({
   initialState: {
     movies: [],
     tvShows: [],
+    searchResults: []
   },
   reducers: {
     getMovies: (state, action) => {
@@ -24,9 +25,15 @@ export const movieSlice = createSlice({
 
        console.log("tv", state.tvShows);
     },
+    getSearchResults: (state, action) => {
+      //@ts-ignore
+      state.searchResults = [...action.payload];
+
+      console.log("searchResults", state.searchResults);
+   },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { getTvShows, getMovies } = movieSlice.actions;
+export const { getTvShows, getMovies, getSearchResults } = movieSlice.actions;
 export default movieSlice.reducer;

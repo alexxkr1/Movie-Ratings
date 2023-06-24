@@ -4,7 +4,13 @@ const RootLayout = ({ children }: any) => {
   return (
     <>
       <NavbarComp />
-      <div style={{ maxWidth: "1280px", justifyContent: 'center', margin: '0 auto' }}>
+      <div
+        style={{
+          maxWidth: "1280px",
+          justifyContent: "center",
+          margin: "0 auto",
+        }}
+      >
         <SearchBar />
         <main>{children}</main>
       </div>
