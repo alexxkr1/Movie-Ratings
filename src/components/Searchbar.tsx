@@ -1,17 +1,30 @@
 import { InputGroup, Input, Button } from "reactstrap";
-import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const SearchBar = () => {
   const navigate = useNavigate();
+  const { keyword } = useParams();
 
   function handleSubmit(e: any) {
     e.preventDefault();
     console.log(searchInput);
     if (searchInput) {
-      navigate(`/search-results/${searchInput}`);
+      const searchPath = `/search-results/${searchInput}`;
+      if (window.location.pathname === searchPath) {
+        window.location.reload(); 
+      } else {
+        navigate(searchPath);
+      }
     }
   }
+
+  useEffect(() => {
+    if (keyword) {
+      setSearchInput(keyword);
+    }
+  }, []);
   const [searchInput, setSearchInput] = useState("");
   return (
     <>

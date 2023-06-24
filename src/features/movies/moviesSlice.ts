@@ -6,31 +6,29 @@ export const movieSlice = createSlice({
   initialState: {
     movies: [],
     tvShows: [],
-    searchResults: []
+    searchResults: [],
+    totalSearchPageResults: 0,
   },
   reducers: {
     getMovies: (state, action) => {
       try {
         //@ts-ignore
         state.movies = [...action.payload];
-
-        console.log("movies", state.movies);
       } catch (error) {
         console.error(error);
       }
     },
     getTvShows: (state, action) => {
-       //@ts-ignore
-       state.tvShows = [...action.payload];
-
-       console.log("tv", state.tvShows);
+      //@ts-ignore
+      state.tvShows = [...action.payload];
     },
     getSearchResults: (state, action) => {
-      //@ts-ignore
-      state.searchResults = [...action.payload];
+      const { results, total_pages } = action.payload;
 
-      console.log("searchResults", state.searchResults);
-   },
+      //@ts-ignore
+      state.searchResults = [...results];
+      state.totalSearchPageResults = total_pages;
+    },
   },
 });
 
