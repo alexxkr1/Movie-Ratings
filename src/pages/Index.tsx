@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import "./Index.css";
+import type { IMovies as RootState } from "@/types/interface/RootState";
 import {
   Button,
   Card,
@@ -13,22 +14,12 @@ import {
   Spinner,
 } from "reactstrap";
 import RootLayout from "@/layout/RootLayout";
-import { httpClient } from "@/axios";
-import { getMovies } from "@/features/movies/moviesSlice";
-interface RootState {
-  movie: {
-    movies: {
-      poster_path: string;
-      title: string;
-      vote_average: number;
-    }[];
-    totalResultsMovies: number;
-  };
-}
+import { fetchMovies } from "@/features/movies/moviesSlice";
+
 function Index() {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
   const movies = useSelector((state: RootState) => state.movie.movies);
+  const isLoading = useSelector((state: RootState) => state.movie.isLoading);
   const totalResultsMovies = useSelector(
     (state: RootState) => state.movie.totalResultsMovies
   );
@@ -39,53 +30,15 @@ function Index() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await httpClient.get(
-          `3/movie/popular?language=en-US&page=${currentPage}`
-        );
-        // Simulating a delay for demonstration purposes
-        await new Promise((resolve) => {
-          setTimeout(resolve, 2000);
-        });
-        dispatch(
-          getMovies({
-            results: data.results,
-            total_pages: data.total_pages,
-          })
-        );
-      } catch (error) {
-        // Handle error
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    function getData() {
+      dispatch(fetchMovies({ type: "movies", currentPage }) as any);
+    }
 
-    fetchData();
+    getData();
   }, [currentPage]);
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        const { data } = await httpClient.get(
-          `3/movie/popular?language=en-US&page=${currentPage}`
-        );
-        await dispatch(getMovies(data.results));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    if (!movies.length) {
-      getData();
-    }
-  }, []);
-
   function renderStars(rating: number) {
-    const numberOfStars = Math.round((rating / 10) * 5); // Calculate the number of filled stars based on the rating
+    const numberOfStars = Math.round((rating / 10) * 5);
     const starIcons = [];
     for (let i = 0; i < 5; i++) {
       if (i < numberOfStars) {

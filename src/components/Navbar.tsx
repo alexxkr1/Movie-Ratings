@@ -6,14 +6,12 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
 } from "reactstrap";
-import { Link, NavLink as navLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function NavbarComp() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-
 
   return (
     <>
@@ -24,14 +22,14 @@ function NavbarComp() {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink to="/tv">
-                  <Link to="/">Movies</Link>
-                </NavLink>
+                <Link className="nav-link" to="/">
+                  Movies
+                </Link>
               </NavItem>
               <NavItem>
-                <NavLink to="/tv" >
-                  <Link to="/tv">TV Shows</Link>
-                </NavLink>
+                <Link className="nav-link" to="/tv">
+                  TV
+                </Link>
               </NavItem>
             </Nav>
           </Collapse>

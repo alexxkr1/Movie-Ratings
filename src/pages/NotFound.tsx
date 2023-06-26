@@ -4,7 +4,7 @@ function NotFound() {
   return (
     <>
       <RootLayout>
-        <h1>Not Found</h1>
+        <h1>Not Found This page</h1>
       </RootLayout>
     </>
   );
