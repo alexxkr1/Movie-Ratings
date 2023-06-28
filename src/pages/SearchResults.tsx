@@ -30,14 +30,16 @@ function SearchResults() {
 
   useEffect(() => {
     function getData() {
-      dispatch(fetchMovies({ type: "searchResults", currentPage }) as any);
+      dispatch(
+        fetchMovies({ type: "searchResults", currentPage, keyword }) as any
+      );
     }
 
     getData();
   }, [currentPage]);
 
   function renderStars(rating: number) {
-    const numberOfStars = Math.round((rating / 10) * 5); 
+    const numberOfStars = Math.round((rating / 10) * 5);
     const starIcons = [];
     for (let i = 0; i < 5; i++) {
       if (i < numberOfStars) {
